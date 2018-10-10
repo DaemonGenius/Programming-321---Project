@@ -218,10 +218,9 @@ public class Register extends javax.swing.JFrame {
             String pattern = "yyyy-MM-dd";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             
-            //Date date = (Date) simpleDateFormat.parse(jTextField3.getText());
+            Date date = (Date) simpleDateFormat.parse(jTextField3.getText());
             
-            Date date1 = (Date) simpleDateFormat.parse("2018-09-09");
-            Insert.RegisterUser(jTextField1.getText(), jTextField2.getText(),date1 , jTextField4.getText(), jTextField5.getText(), jTextField6.getText(), jTextField7.getText(),1);
+            Insert.RegisterUser(jTextField1.getText(), jTextField2.getText(),date , jTextField4.getText(), jTextField5.getText(), jTextField6.getText(), jTextField7.getText(),1);
         } catch (ParseException ex) {
             Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -15,7 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javax.swing.text.html.HTML.Tag.SELECT;
 
-
 /**
  *
  * @author chris
@@ -25,9 +24,6 @@ public class DbCon_Select {
     String dbUrl = "jdbc:mysql://localhost:3306/bcstatmanagementsystemdb";
     String username = "root";
     String password = "";
-    
-
-    
 
 //    public DbCon_Select() {
 //        try (Connection conn = DriverManager.getConnection(dbUrl, username, password)) {
@@ -44,7 +40,6 @@ public class DbCon_Select {
 //        }
 //
 //    }
-
     public boolean Login(String Username) throws SQLException {
         String query = "SELECT `ID`, `FName`, `LName`, `DOB`, `Cellnr`, `DepartmentID`, `Location`, `Username`, `Password` FROM `person` WHERE person.Username = '" + Username + "'";
         try (Connection conn = DriverManager.getConnection(dbUrl, username, password)) {
@@ -58,6 +53,34 @@ public class DbCon_Select {
         }
         return false;
 
+    }
+
+    public ResultSet ProductCategory() throws SQLException {
+        String query = "SELECT `ProductCategory` FROM `product` WHERE 1";
+        try (Connection conn = DriverManager.getConnection(dbUrl, username, password)) {
+            try (PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(query)) {
+                ResultSet rs;
+                rs = stmt.executeQuery(query);
+                while (rs.next()) {
+                    String ProductCategory = rs.getString("ProductCategory");
+                }
+                return rs;
+            }
+        }
+    }
+
+    public ResultSet ProductName() throws SQLException {
+        String query = "SELECT `ProductName` FROM `product` WHERE 1";
+        try (Connection conn = DriverManager.getConnection(dbUrl, username, password)) {
+            try (PreparedStatement stmt = (PreparedStatement) conn.prepareStatement(query)) {
+                ResultSet rs;
+                rs = stmt.executeQuery(query);
+                while (rs.next()) {
+                    String ProductName = rs.getString("ProductName");
+                }
+                return rs;
+            }
+        }
     }
 
 }

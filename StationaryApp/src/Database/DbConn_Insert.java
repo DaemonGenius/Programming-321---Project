@@ -50,4 +50,25 @@ public class DbConn_Insert {
     
     }
     
+    
+    public void InsertProduct(String ProductName, String CategoryName, String Model, double Quantity, double Price, Date DOE){
+         String Query = "INSERT INTO `product`(`ProductName`, `CategoryName`, `Model`, `Quantity`, `Price`, `DateofEntry`) VALUES ('"+ProductName+"','"+CategoryName+"','"+Model+"','"+Quantity+"','"+Price+"','"+DOE+"')";
+        try(Connection conn = DriverManager.getConnection(dbUrl,username,password)) {
+             
+              try(PreparedStatement stmt = conn.prepareStatement(dbUrl)) {
+               
+                stmt.setString(2, ProductName);
+                stmt.setString(3, CategoryName);
+                stmt.setDouble(4, Quantity);
+                stmt.setDate(6, DOE);
+                stmt.setDouble(5, Price);
+                stmt.executeUpdate();
+              }
+              
+        } catch (SQLException ex) {
+            Logger.getLogger(DbConn_Insert.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
 }
