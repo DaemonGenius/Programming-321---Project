@@ -7,20 +7,22 @@ package Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
  * @author chris
  */
 public class DbConn {
-     String dbUrl = "";
-     String username = "root";
-     String password = "";
-    
-    public void main(String[] args) {
-        try (Connection conn = DriverManager.getConnection(dbUrl,username,password)){
-            
-        } catch (Exception e) {
-        }
+
+    String dbUrl = "";
+    String username = "root";
+    String password = "";
+
+  
+    public void Connect() throws SQLException {
+      Connection conn = DriverManager.getConnection(dbUrl, username, password);
+
+        
     }
 }
