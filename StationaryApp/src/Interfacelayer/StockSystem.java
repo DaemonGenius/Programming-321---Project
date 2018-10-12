@@ -5,7 +5,7 @@
  */
 package Interfacelayer;
 
-import Database.DbCon_Select;
+
 
 /**
  *
@@ -194,9 +194,9 @@ public class StockSystem extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new StockSystem().setVisible(true);
-                DbCon_Select select = new DbCon_Select();
+                //DbCon_Select select = new DbCon_Select();
                 while (true) {                    
-                    jList1.add(select.ProductCategory());
+                    //jList1.add(select.ProductCategory());
                 }
                 
             }
