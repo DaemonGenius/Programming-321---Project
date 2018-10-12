@@ -135,7 +135,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
     public static Person p = new Person();
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // this.setVisible(false);
+         this.setVisible(false);
         
 
         try {
