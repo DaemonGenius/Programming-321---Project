@@ -5,6 +5,7 @@
  */
 package Interfacelayer;
 
+import ApplicationLogic.Applicationlib;
 import DatabaseControllers.Person;
 import java.nio.charset.Charset;
 import java.util.Random;
@@ -229,6 +230,9 @@ public class Register extends javax.swing.JFrame {
                     JFrame frame = new JFrame("InputDialog Example #1");
                     JOptionPane.showMessageDialog(frame, "Succesfully Applied.. Check status to check if you can login...");
                     JOptionPane.showMessageDialog(frame, "Your username is: " + Username + " Remember IT!!!");
+                    
+                    
+                    
                     this.setVisible(false);
                     new Login().setVisible(true);
                 } else {

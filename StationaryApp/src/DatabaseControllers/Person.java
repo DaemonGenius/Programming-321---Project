@@ -119,37 +119,31 @@ public class Person {
         this._Password = Password;
     }
     public static Person person = new Person();
-    public Person getPerson(String username) {
+    public static ResultSet rs;
+
+    public Person getPerson(String username) throws SQLException {
         Connection connection = DbConn.getConnection();
+
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM `person` WHERE `Username` = '"+username+"'");
+            rs = stmt.executeQuery("SELECT * FROM `person` WHERE `Username` = '" + username + "'");
             if (rs.next()) {
-                
-                person = new Person();
-                person.setId(rs.getInt("ID"));
-                person.setFName(rs.getString("FName"));
-                person.setLName(rs.getString("LName"));
-                person.setDOB(rs.getString("DOB"));
-                person.setDepartment(rs.getString("Department"));
-                person.setLocation(rs.getString("Location"));
-                person.setCellNr(rs.getString("Cellnr"));
-                person.setUsername(rs.getString("Username"));
-                person.setPassword(rs.getString("Password"));
-                return person;
-            }
-            else{
+
+                return extractUserFromResultSet(rs);
+            } else {
                 JFrame frame = new JFrame();
-                JOptionPane.showMessageDialog(frame, "Account doesnt exist!?!?"); 
+                JOptionPane.showMessageDialog(frame, "Account doesnt exist!?!?");
             }
         } catch (SQLException ex) {
+
             ex.printStackTrace();
         }
+
         return null;
     }
 
     private Person extractUserFromResultSet(ResultSet rs) throws SQLException {
-        person = new Person();
+
         person.setId(rs.getInt("ID"));
         person.setFName(rs.getString("FName"));
         person.setLName(rs.getString("LName"));
@@ -159,16 +153,17 @@ public class Person {
         person.setCellNr(rs.getString("Cellnr"));
         person.setUsername(rs.getString("Username"));
         person.setPassword(rs.getString("Password"));
+
         return person;
     }
-    public static ResultSet rs;
-    
+
     public Person getLoginCredentials(String user, String pass) throws SQLException {
-        DbConn connector = new DbConn();         
+        DbConn connector = new DbConn();
         String Admin = "Admin";
+        String Staff = "Staff";
         Connection connection = connector.getConnection();
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM person WHERE Username=? AND Password=? AND Department = '"+Admin+"'");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM person WHERE Username=? AND Password=? AND Department = '" + Admin + "' OR Department = '" + Staff + "'");
             ps.setString(1, user);
             ps.setString(2, pass);
             rs = ps.executeQuery();
@@ -180,24 +175,53 @@ public class Person {
         }
         return null;
     }
-    public boolean state;
-    public boolean getLoginStatus(String user) throws SQLException {
-        Connection connection = DbConn.getConnection(); 
-        person = getPerson(user);
-        String pending = "Pending";
-        String Admin = "Admin";
-        
-        if (person.getDepartment().equals(pending)) {
-            state = true; 
-        }else if (person.getDepartment().equals(Admin)) {
-            state = false;
+    public Person users;
+
+    public Person GetUser(String user) throws SQLException {
+        users = getPerson(user);
+        return users;
+    }
+
+    public Set getApplicationStatus() {
+        DbConn connector = new DbConn();
+        String Pending = "Pending";
+        Connection connection = connector.getConnection();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM `person` WHERE `Department` = '"+Pending+"'");
+            Set persons = new HashSet();
+            while (rs.next()) {
+                Person person = extractUserFromResultSet(rs);
+                persons.add(person);               
+            }
+            return persons;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        
-        
-        return state;
+        return null;
     }
     
     
+    
+    public String state;
+
+    public String getLoginStatus(String user) throws SQLException {
+        Connection connection = DbConn.getConnection();
+        person = getPerson(user);
+        String pending = "Pending";
+        String Admin = "Admin";
+        String Staff = "Staff";
+
+        if (person.getDepartment().equals(pending)) {
+            state = pending;
+        } else if (person.getDepartment().equals(Admin)) {
+            state = Admin;
+        } else if (person.getDepartment().equals(Staff)) {
+            state = Staff;
+        }
+
+        return state;
+    }
 
     public Set getAllUsers() {
         DbConn connector = new DbConn();
@@ -216,33 +240,29 @@ public class Person {
         }
         return null;
     }
-    
-    
+
     public boolean insertUser(Person person) {
-    DbConn connector = new DbConn();
-    Connection connection = connector.getConnection();
-    try {
-        PreparedStatement ps = connection.prepareStatement("INSERT INTO person VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");        
-        ps.setString(1, person.getFName());
-        ps.setString(2, person.getLName());
-        ps.setString(3, person.getDOB());
-        ps.setString(4, person.getCellNr());
-        ps.setString(5, person.getLocation());
-        ps.setString(6, person.getDepartment());
-        ps.setString(7, person.getUsername());
-        ps.setString(8, person.getPassword());       
-       
-        int i = ps.executeUpdate();
-      if(i == 1) {
-        return true;
-      }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
+        DbConn connector = new DbConn();
+        Connection connection = connector.getConnection();
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO person VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setString(1, person.getFName());
+            ps.setString(2, person.getLName());
+            ps.setString(3, person.getDOB());
+            ps.setString(4, person.getCellNr());
+            ps.setString(5, person.getLocation());
+            ps.setString(6, person.getDepartment());
+            ps.setString(7, person.getUsername());
+            ps.setString(8, person.getPassword());
+
+            int i = ps.executeUpdate();
+            if (i == 1) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
-    return false;
-}
-    
-    
-    
 
 }

@@ -134,20 +134,40 @@ public class Login extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
     public static Person p = new Person();
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         this.setVisible(false);
-        
+    public static String username;
+    public static String FName;
+    public static String LName;
+    public static String DOB;
+    public static String Location;
+    public static String CellNr;
 
+    //Login method
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        username = jTextField1.getText();
+        JFrame frame = new JFrame("InputDialog Example #1");
+        Person user = new Person();
         try {
             if (p.getLoginCredentials(jTextField1.getText(), jPasswordField1.getText()) != null) {
-                 new StockSystem().setVisible(true);
-            }else if(p.getLoginCredentials(jTextField1.getText(), jPasswordField1.getText()) == null){
+                if (p.getLoginStatus(username) == "Admin") {
+                    JOptionPane.showMessageDialog(frame, "Admin Logged in");
+
+                    this.setVisible(false);
+                    new StockSystem().setVisible(true);
+                } else if (p.getLoginStatus(username) == "Staff") {
+                    //JOptionPane.showMessageDialog(frame, "Logged in");
+                    this.setVisible(false);
+                    new StaffApp().setVisible(true);
+                    
+                    
+
+                }
+
+            } else if (p.getLoginCredentials(jTextField1.getText(), jPasswordField1.getText()) == null) {
                 System.out.println("Login Error");
                 jLabel2.setText("Error!!");
                 jLabel3.setText("Error!!");
             }
-           
-           
+
         } catch (Exception e) {
         }
 
@@ -155,24 +175,24 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
-                jLabel2.setText("Password:");
-                jLabel3.setText("Username:");
+        jLabel2.setText("Password:");
+        jLabel3.setText("Username:");
     }//GEN-LAST:event_jTextField1MouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       JFrame frame = new JFrame("InputDialog Example #1");
-        String username =  JOptionPane.showInputDialog(frame,"Enter Username","");
+        JFrame frame = new JFrame("InputDialog Example #1");
+        String username = JOptionPane.showInputDialog(frame, "Enter Username", "");
         try {
-            if (p.getLoginStatus(username) == true) {
-                 JFrame frame1 = new JFrame("InputDialog Example #1");
+            if (p.getLoginStatus(username) == "Pending") {
+                JFrame frame1 = new JFrame("InputDialog Example #1");
                 JOptionPane.showMessageDialog(frame, "Your Account is still Pending");
-            }else if (p.getLoginStatus(username) != true) {
+            } else if (p.getLoginStatus(username) == "Admin") {
                 JOptionPane.showMessageDialog(frame, "Account Already Activated!?!?");
             }
         } catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

@@ -15,7 +15,9 @@ import java.util.Set;
 public interface UserDao {
     Person getPerson();
     Set<Person> getAllUsers();
+    Set<Person> getApplicationStatus();
     Person getLoginCredentials();
+    public Person GetUser();
     boolean getLoginStatus();
     boolean insertPerson();
     boolean updatePerson();
