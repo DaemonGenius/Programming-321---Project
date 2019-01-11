@@ -6,6 +6,7 @@
 package ApplicationLogic;
 
 import DatabaseControllers.Person;
+import DatabaseControllers.PurchaseOrder;
 import java.io.FileWriter;
 /**
  *
@@ -13,7 +14,10 @@ import java.io.FileWriter;
  */
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import static com.oracle.jrockit.jfr.ContentType.Class;
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,43 +32,51 @@ import java.util.Set;
 public class Applicationlib {
 
     public static Person p = new Person();
-    public static Set<Person> Users = new HashSet();
+    public static ArrayList<Person> Users = new ArrayList<Person>();
 
+    public static PurchaseOrder Po = new PurchaseOrder();
+    public static ArrayList<PurchaseOrder> Orders = new ArrayList<>();
+    
     public boolean WriteTOfile() throws IOException {
 
         try (Writer writer = new FileWriter("Output.json")) {
             Gson gson = new GsonBuilder().create();
             Users = p.getApplicationStatus();
-            Iterator<Person> it = Users.iterator();
-            while (it.hasNext()) {
-                //gson.toJson(it, writer);
-                System.out.println(it.next());
-
-                for (Person User : Users) {
-                    System.out.println(User.getDepartment());
-                    String json = gson.toJson(User);
-                    writer.write(json);
-                }
-            }
-
+            String json = gson.toJson(Users);
+            writer.write(json);
         }
         return true;
     }
 
-    public ArrayList ReadFromfile() throws IOException {
+    public ArrayList<Person> ReadFromfile() throws IOException {
         ArrayList<Person> list = new ArrayList<>();
         try {
             Gson gson = new Gson();
             Reader br = new FileReader("Output.json");
-
-            //convert the json string back to object
-            p = gson.fromJson(br, Person.class);
-            list.add(p);
-            for (Person person : list) {
-                System.out.println("Username: " + person.getUsername());
-                System.out.println("Department: " + p.getDepartment());
-            }
-
+            list = (ArrayList<Person>) gson.fromJson(br, new TypeToken<ArrayList<Person>>() {
+            }.getType());
+        } catch (Exception e) {
+        }
+        return list;
+    }
+    
+    public boolean WriteTOfilePurchaseOrder() throws IOException {
+        try (Writer writer = new FileWriter("OutputPurchaseOrder.json")) {
+            Gson gson = new GsonBuilder().create();
+            Orders = Po.getPurchaseOrderStatus();
+            String json = gson.toJson(Orders);
+            writer.write(json);
+        }
+        return true;
+    }
+    
+    public ArrayList<PurchaseOrder> ReadFromfilePurchaseOrder() throws IOException {
+        ArrayList<PurchaseOrder> list = new ArrayList<>();
+        try {
+            Gson gson = new Gson();
+            Reader br = new FileReader("OutputPurchaseOrder.json");
+            list = (ArrayList<PurchaseOrder>) gson.fromJson(br, new TypeToken<ArrayList<PurchaseOrder>>() {
+            }.getType());
         } catch (Exception e) {
         }
         return list;
